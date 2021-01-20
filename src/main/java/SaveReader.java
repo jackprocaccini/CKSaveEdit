@@ -7,7 +7,7 @@ import java.util.Stack;
 
 public class SaveReader {
 
-    public static void getCharacters(File gamestate) throws IOException {
+    public static HashMap<String, ICK3Character> getCharacters(File gamestate) throws IOException {
         Scanner sc = new Scanner(gamestate, StandardCharsets.UTF_8);
         HashMap<String, ICK3Character> allChars = new HashMap<>();
         Stack<String> curlyBraceStack = new Stack<>();
@@ -22,12 +22,17 @@ public class SaveReader {
         while(!curlyBraceStack.empty()){ // when the stack is empty, we've reached the end of the "living" section
             currentLine = sc.nextLine();
 
-            if(currentLine.contains("{")){
-                curlyBraceStack.push("{");
-            }
+            if(currentLine.contains("{") || currentLine.contains("}")){ // TODO Redo this so it only loops through the whole line if there is more than one curly bracket
+                char[] tempLine = currentLine.toCharArray();
+                for(int i = 0; i < tempLine.length; i++){
+                    if(tempLine[i] == '{'){
+                        curlyBraceStack.push("{");
 
-            if(currentLine.contains("}")){
-                curlyBraceStack.pop();
+                    } else if(tempLine[i] == '}'){
+                        curlyBraceStack.pop();
+                    }
+                }
+
             }
 
             if(curlyBraceStack.size() == 2){ // when the stack has exactly size 2, we reached a character block
@@ -38,19 +43,24 @@ public class SaveReader {
                     currentLine = sc.nextLine();
                     currentCharacterData.append(currentLine + "\n");
 
-                    if(currentLine.contains("{")){
-                        curlyBraceStack.push("{");
-                    }
+                    if(currentLine.contains("{") || currentLine.contains("}")){
+                        char[] tempLine = currentLine.toCharArray();
+                        for(int i = 0; i < tempLine.length; i++){
+                            if(tempLine[i] == '{'){
+                                curlyBraceStack.push("{");
 
-                    if(currentLine.contains("}")){
-                        curlyBraceStack.pop();
+                            } else if(tempLine[i] == '}'){
+                                curlyBraceStack.pop();
+                            }
+                        }
                     }
-
                 }
 
                 ICK3Character temp = new CK3Character(currentCharacterData.toString());
                 allChars.put(temp.getID(), temp);
             }
         }
+
+        return allChars;
     }
 }
