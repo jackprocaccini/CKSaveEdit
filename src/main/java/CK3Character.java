@@ -10,4 +10,8 @@ public class CK3Character implements ICK3Character{
     public String getID(){
         return null;
     }
+
+    public String getName() {
+        return null;
+    }
 }
