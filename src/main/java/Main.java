@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Set;
 
 public class Main {
 
@@ -7,14 +9,8 @@ public class Main {
     public static String pathToTestFile = "src\\main\\resources\\stuff.txt";
 
     public static void main(String[] args){
-        // "living" is the beginning of live characters, starts on line 436247 and ends on 1270007. Thorgil is on line 549810
-//        new CKSaveEdit(new File(pathToDemoFile));
-        try {
-            SaveReader.getCharacters(new File(pathToTestFile));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 }
 
-// TODO: Implement CK3Character.java
+//TODO Clean up CK3Character code, implement things like retrieving culture and stuff like that
