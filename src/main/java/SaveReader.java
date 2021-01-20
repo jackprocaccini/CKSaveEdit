@@ -22,17 +22,8 @@ public class SaveReader {
         while(!curlyBraceStack.empty()){ // when the stack is empty, we've reached the end of the "living" section
             currentLine = sc.nextLine();
 
-            if(currentLine.contains("{") || currentLine.contains("}")){ // TODO Redo this so it only loops through the whole line if there is more than one curly bracket
-                char[] tempLine = currentLine.toCharArray();
-                for(int i = 0; i < tempLine.length; i++){
-                    if(tempLine[i] == '{'){
-                        curlyBraceStack.push("{");
-
-                    } else if(tempLine[i] == '}'){
-                        curlyBraceStack.pop();
-                    }
-                }
-
+            if(currentLine.contains("{") || currentLine.contains("}")){
+                curlyBraceStack = readBraces(curlyBraceStack, currentLine);
             }
 
             if(curlyBraceStack.size() == 2){ // when the stack has exactly size 2, we reached a character block
@@ -44,23 +35,42 @@ public class SaveReader {
                     currentCharacterData.append(currentLine + "\n");
 
                     if(currentLine.contains("{") || currentLine.contains("}")){
-                        char[] tempLine = currentLine.toCharArray();
-                        for(int i = 0; i < tempLine.length; i++){
-                            if(tempLine[i] == '{'){
-                                curlyBraceStack.push("{");
-
-                            } else if(tempLine[i] == '}'){
-                                curlyBraceStack.pop();
-                            }
-                        }
+                        curlyBraceStack = readBraces(curlyBraceStack, currentLine);
                     }
                 }
-
+                System.out.println(currentCharacterData);
                 ICK3Character temp = new CK3Character(currentCharacterData.toString());
                 allChars.put(temp.getID(), temp);
             }
         }
 
         return allChars;
+    }
+
+    private static Stack<String> readBraces(Stack<String> curlyBraceStack, String currentLine) {
+        if(currentLine.indexOf("{") != currentLine.lastIndexOf("{") || currentLine.indexOf("}") != currentLine.lastIndexOf("}")) {
+            char[] tempLine = currentLine.toCharArray();
+            for(int i = 0; i < tempLine.length; i++){
+                if(tempLine[i] == '{'){
+                    curlyBraceStack.push("{");
+
+                } else if(tempLine[i] == '}'){
+                    curlyBraceStack.pop();
+                }
+
+            }
+
+        } else {
+            if(currentLine.contains("{")){
+                curlyBraceStack.push("{");
+            }
+
+            if(currentLine.contains("}")){
+                curlyBraceStack.pop();
+
+            }
+        }
+
+        return curlyBraceStack;
     }
 }
