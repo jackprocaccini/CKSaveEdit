@@ -23,7 +23,7 @@ public class SaveReader {
             currentLine = sc.nextLine();
 
             if(currentLine.contains("{") || currentLine.contains("}")){
-                curlyBraceStack = readBraces(curlyBraceStack, currentLine);
+                readBraces(curlyBraceStack, currentLine);
             }
 
             if(curlyBraceStack.size() == 2){ // when the stack has exactly size 2, we reached a character block
@@ -35,7 +35,7 @@ public class SaveReader {
                     currentCharacterData.append(currentLine + "\n");
 
                     if(currentLine.contains("{") || currentLine.contains("}")){
-                        curlyBraceStack = readBraces(curlyBraceStack, currentLine);
+                        readBraces(curlyBraceStack, currentLine);
                     }
                 }
                 System.out.println(currentCharacterData);
@@ -47,7 +47,7 @@ public class SaveReader {
         return allChars;
     }
 
-    private static Stack<String> readBraces(Stack<String> curlyBraceStack, String currentLine) {
+    private static void readBraces(Stack<String> curlyBraceStack, String currentLine) {
         if(currentLine.indexOf("{") != currentLine.lastIndexOf("{") || currentLine.indexOf("}") != currentLine.lastIndexOf("}")) {
             char[] tempLine = currentLine.toCharArray();
             for(int i = 0; i < tempLine.length; i++){
@@ -70,7 +70,5 @@ public class SaveReader {
 
             }
         }
-
-        return curlyBraceStack;
     }
 }
